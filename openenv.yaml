@@ -1,0 +1,19 @@
+spec_version: 1
+name: pharma_agent
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+tasks:
+  - name: easy
+    description: "No existing medications. Diagnose condition and select appropriate drug."
+    max_steps: 10
+    max_episode_reward: 1.5
+  - name: medium
+    description: "Patient has existing medications. DDI check required before finalizing."
+    max_steps: 10
+    max_episode_reward: 1.5
+  - name: hard
+    description: "Existing medications with contraindicated interaction. Must identify and avoid dangerous drug."
+    max_steps: 10
+    max_episode_reward: 1.5
