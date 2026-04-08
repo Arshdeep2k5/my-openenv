@@ -29,12 +29,24 @@ from models import PharmaAgentAction, PharmaAgentObservation
 from pharma_agent_environment import PharmaAgentEnvironment
 
 
-from app import app, main as root_main
+app = create_app(
+    PharmaAgentEnvironment,
+    PharmaAgentAction,
+    PharmaAgentObservation,
+    env_name="pharma_agent",
+    max_concurrent_envs=8,
+)
 
 
 def main(host: str = "0.0.0.0", port: int = 8000):
-    return root_main(host=host, port=port)
+    import uvicorn
+    uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--host", type=str, default="0.0.0.0")
+    args = parser.parse_args()
+    main(host=args.host, port=args.port)
