@@ -285,3 +285,5 @@ pharma_agent/
 ├── create_db.py                     # Database creation script
 └── drugbank_lite.db                 # SQLite database (generated)
 ```
+#   F o r c e   r e b u i l d   a f t e r   . d o c k e r i g n o r e   a d d i t i o n  
+ 
