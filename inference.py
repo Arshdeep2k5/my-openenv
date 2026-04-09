@@ -11,8 +11,8 @@ CRITICAL FIXES - 7 Major Refactoring:
   7. Clear phase handlers - zero state entanglement
 
 Mandatory environment variables:
-    HF_TOKEN       - HuggingFace token (used as API key via HF router)
-    API_BASE_URL   - LLM endpoint (default: HuggingFace router)
+    API_KEY        - API key (injected by hackathon, or set for local dev)
+    API_BASE_URL   - LLM endpoint (injected by hackathon, or set for local dev)
     MODEL_NAME     - Model identifier (default: Qwen/Qwen2.5-72B-Instruct)
     ENV_BASE_URL   - Environment server URL
 
@@ -33,8 +33,14 @@ from openai import OpenAI
 load_dotenv("env")
 
 # ── Config ────────────────────────────────────────────────────────────────────
-API_KEY      = os.getenv("HF_TOKEN") or os.getenv("API_KEY", "")
-API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
+# Use injected environment variables (required for hackathon)
+try:
+    API_KEY = os.environ["API_KEY"]
+    API_BASE_URL = os.environ["API_BASE_URL"]
+except KeyError as e:
+    print(f"Required environment variable not set: {e}. For hackathon, API_KEY and API_BASE_URL are injected. For local dev, set them manually.", flush=True)
+    exit(1)
+
 MODEL_NAME   = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
 ENV_BASE_URL = os.getenv("ENV_BASE_URL", "http://localhost:8000")
 BENCHMARK    = "pharma_agent"
@@ -603,7 +609,7 @@ def grader(task_scores: dict) -> float:
 
 def main():
     if not API_KEY:
-        print("HF_TOKEN not set. Add it to your env file.", flush=True)
+        print("API_KEY not set. For hackathon, this is injected. For local dev, set API_KEY environment variable.", flush=True)
         return
 
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
