@@ -9,19 +9,18 @@ ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    g++ \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for layer caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all source files
+# Copy all source files (includes pre-built database)
 COPY . .
-
-# Create the database if it doesn't exist
-RUN python create_db.py
 
 # Expose the server port
 EXPOSE 8000

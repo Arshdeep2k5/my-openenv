@@ -1,21 +1,21 @@
 # Core OpenEnv runtime
-openenv-core[core]>=0.2.3
+openenv-core[core]==0.2.3
 
 # Web framework
-fastapi>=0.115.0
-uvicorn[standard]>=0.24.0
+fastapi==0.135.3
+uvicorn[standard]==0.44.0
 
 # HTTP client
-requests>=2.31.0
+requests==2.33.1
 
 # Environment variable management
-python-dotenv>=1.0.0
+python-dotenv==1.2.2
 
 # OpenAI-compatible client
-openai>=1.0.0
+openai==2.30.0
 
 # Pydantic v2
-pydantic>=2.0.0
+pydantic==2.12.5
 
 # WebSocket support
-websockets>=10.0
+websockets==16.0
