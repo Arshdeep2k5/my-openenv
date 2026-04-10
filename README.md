@@ -24,8 +24,6 @@ Built for the **Meta PyTorch OpenEnv Hackathon x SST — India AI Hackathon '26*
 
 ## Environment Description
 
-## Environment Description
-
 PharmaAgent simulates the workflow of a clinical pharmacist:
 
 1. **Diagnose** — identify the patient's condition from presented symptoms using clinical terminology
@@ -285,5 +283,6 @@ pharma_agent/
 ├── create_db.py                     # Database creation script
 └── drugbank_lite.db                 # SQLite database (generated)
 ```
-#   F o r c e   r e b u i l d   a f t e r   . d o c k e r i g n o r e   a d d i t i o n  
+
+ 
  
