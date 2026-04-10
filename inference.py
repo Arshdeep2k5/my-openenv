@@ -186,7 +186,7 @@ def get_model_action(client: OpenAI, conversation: List[dict], obs: dict) -> tup
 # ── Episode runner ─────────────────────────────────────────────────────────────
 
 def run_episode(client: OpenAI, task: str) -> float:
-    """Run one full episode. Returns normalised score 0.0-1.0."""
+    """Run one full episode. Returns normalised score strictly in (0, 1)."""
     log_start(task=task, env=BENCHMARK, model=MODEL_NAME)
 
     rewards: List[float] = []
@@ -234,12 +234,14 @@ def run_episode(client: OpenAI, task: str) -> float:
                 break
 
         total_reward = sum(rewards)
-        score   = round(min(max(total_reward / MAX_EPISODE_REWARD, 0.0), 1.0), 3)
+        raw_score = total_reward / MAX_EPISODE_REWARD
+        # Clamp strictly within (0, 1) — 0.0 and 1.0 are not allowed
+        score = round(min(max(raw_score, 0.001), 0.999), 3)
         success = score >= SUCCESS_THRESHOLD
 
     except Exception as e:
         rewards = rewards or [0.0]
-        score   = 0.0
+        score   = 0.001  # never 0.0
         success = False
         log_step(step=steps_taken + 1, action="error", reward=0.0, done=True, error=str(e))
 
@@ -253,7 +255,8 @@ def run_episode(client: OpenAI, task: str) -> float:
 def grader(task_scores: dict) -> float:
     weights = {"easy": 0.2, "medium": 0.3, "hard": 0.5}
     final = sum(task_scores.get(t, 0.0) * w for t, w in weights.items())
-    return round(min(max(final, 0.0), 1.0), 4)
+    # Clamp strictly within (0, 1)
+    return round(min(max(final, 0.001), 0.999), 4)
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
